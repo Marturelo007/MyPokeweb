@@ -121,7 +121,7 @@ body {
 
 .container {
   width: 100%;
-  margin: 0;
+  margin: 0 auto;
 }
 
 .logowrapper {
@@ -711,6 +711,11 @@ div#not-found-message {
   display: none; 
 }
 
+.text-container {
+  width: 80%; 
+  margin: 0 auto; 
+}
+
 @media screen and (max-width: 768px) {
   .toggle {
     display: flex;
@@ -721,6 +726,12 @@ div#not-found-message {
   }
   #checkbox:checked + .toggle ~ .navbar-container {
     display: block; /* Mostrar el contenido del navbar-container cuando el toggler esté activo */
+  }
+  .text-container {
+    width: 90%;
+  }
+  .container {
+    height: 8%; /* Adjust the width for larger screens */
   }
   .detail-card-detail-wrapper{
     margin:3%;
@@ -931,14 +942,20 @@ body {
   border-radius: 0.75rem;
   min-height: calc(83% - 16rem);
   width: calc(90% - 0rem);
- margin-left : 5%;
-  max-height: 100px;
+  margin-left : 5%;
+  height: 70%;
   /* overflow-y: auto; */
   text-align: center;
   align-items: center;
   justify-content: center;
 }
 
+@media screen and (max-width: 768px) {
+  section.title {
+    width: 90%; /* Adjust the width for smaller screens */
+    height: 50%;
+  }
+}
 .h2{
 text-align: left;
 justify-content: left;
