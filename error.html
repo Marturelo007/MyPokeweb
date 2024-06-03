@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MB.Pokedex</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" href="./assets/pokeball.svg" />
+    <script
+      src="https://kit.fontawesome.com/bdf06eb8e9.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body id="body">
+    <main class="main">
+      <header class="header home">
+        <div class="container">
+          <div class="logowrapper">
+            <img id="pokeball-image" src="./assets/pokeball.svg" alt="pokeball"/>
+
+            <input id="checkbox" type="checkbox">
+            <label class="toggle" for="checkbox">
+                <div id="bar1" class="bars"></div>
+                <div id="bar2" class="bars"></div>
+                <div id="bar3" class="bars"></div>
+            </label>
+            
+            <div class="navbar-container">
+                <a href="index.html"><button class="navbar">Pokedex</button></a>
+                <a href="error.html"><button class="navbar">Guia combate</button></a>
+                <a href="items.html"><button class="navbar">Items</button></a>
+                <!-- <a href="error.html"><button class="navbar">Pokemon showdown</button></a> -->
+            </div>
+            
+
+
+            <!-- dividir por region, hacer el clasificador por tipo de pokemon y por region Aplicar el ESC,-->
+          </div>
+          <div class="search-wrapper">
+            <div class="search-wrap">
+              <img
+                src="./assets/search.svg"
+                alt="search icon"
+                class="search-icon"
+              />
+              <input
+                type="text"
+                class="search-input body3-fonts"
+                placeholder="Search"
+                id="search-input"
+              />
+              <img
+                src="./assets/cross.svg"
+                alt="cross icon"
+                class="search-close-icon"
+                id="search-close-icon"
+              />
+            </div>
+            <div class="sort-wrapper">
+              <div class="sort-wrap">
+                <img
+                  src="./assets/sorting.svg"
+                  alt="sorting"
+                  class="sort-icon"
+                  id="sort-icon"
+                />
+              </div>
+              <div class="filter-wrapper">
+                <p class="body2-fonts">Sort by:</p>
+                <div class="filter-wrap">
+                  <div>
+                    <input
+                      type="radio"
+                      id="number"
+                      name="filters"
+                      value="number"
+                      checked
+                    />
+                    <label for="number" class="body3-fonts">Name</label>
+                  </div>
+                  <div>
+                    <input type="radio" id="name" name="filters" value="name" />
+                    <label for="name" class="body3-fonts">Number</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="toggle-switch">
+              <label class="switch-label">
+                <input type="checkbox" class="checkbox">
+                <span class="slider"></span>
+              </label>
+            </div>  
+          </div>
+        </div>
+      </header>
+      <section class="pokemon-list">
+        <div class="container">
+          <div class="list-wrapper"></div>
+        </div>
+        <div id="not-found-message">Pokemon not found</div>
+        <h1 class="ERROR">Estamos trabajando en este sector</h1>
+        <img
+            src="/assets/construccion.png"
+            alt="ERROR"
+            class="ERROR-img"
+            id="sort-icon"
+          />
+      </section>
+
+    </main>
+  </body>
+</html>
+
+
+
