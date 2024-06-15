@@ -2,7 +2,7 @@ const inputElement = document.querySelector("#search-input");
 const search_icon = document.querySelector("#search-close-icon");
 const sort_wrapper = document.querySelector(".sort-wrapper");
 
-inputElement.addEventListener("input", () => {
+inputElement.addEventListener("keyup", () => {
   handleInputChange(inputElement);
 });
 search_icon.addEventListener("click", handleSearchCloseOnClick);
@@ -35,3 +35,11 @@ function handleSortIconOnClick() {
     .classList.toggle("filter-wrapper-open");
   document.querySelector("body").classList.toggle("filter-wrapper-overlay");
 }
+
+
+    // Event listener for keydown to prevent typing when not hovered
+    document.addEventListener('keydown', (event) => {
+        if (!inputElement.matches(':hover')) {
+            event.preventDefault();
+        }
+    });
