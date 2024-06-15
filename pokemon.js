@@ -264,3 +264,42 @@
     });
   });
   
+
+
+  function enableInput() {
+    document.getElementById("earch-input").removeAttribute("disabled");
+  }
+
+  function disableInput() {
+    document.getElementById("earch-input").setAttribute("disabled", "disabled");
+  }
+
+
+//------------------------------------------------------------
+
+// JavaScript to populate and manage dropdown menu
+document.addEventListener('DOMContentLoaded', function() {
+  const dropdownContent = document.getElementById('dropdownContent');
+  const dropdownButton = document.getElementById('dropdownButton');
+
+  // Populate dropdown content with section buttons
+  for (let i = 1; i <= 9; i++) {
+    const sectionButton = document.getElementById(`section${i}Button`);
+    dropdownContent.appendChild(sectionButton);
+    sectionButton.addEventListener('click', function() {
+      dropdownContent.classList.remove('open');
+    });
+  }
+
+  // Toggle dropdown menu visibility
+  dropdownButton.addEventListener('click', function() {
+    dropdownContent.classList.toggle('open');
+  });
+
+  // Close dropdown when clicking outside of it
+  document.addEventListener('click', function(event) {
+    if (!event.target.closest('.dropdown')) {
+      dropdownContent.classList.remove('open');
+    }
+  });
+});

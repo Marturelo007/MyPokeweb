@@ -35,3 +35,11 @@ function handleSortIconOnClick() {
     .classList.toggle("filter-wrapper-open");
   document.querySelector("body").classList.toggle("filter-wrapper-overlay");
 }
+
+
+    // Event listener for keydown to prevent typing when not hovered
+    document.addEventListener('keydown', (event) => {
+        if (!inputElement.matches(':hover')) {
+            event.preventDefault();
+        }
+    });
