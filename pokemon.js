@@ -264,3 +264,21 @@
     });
   });
   
+
+
+  // Event listener para el select
+document.getElementById('sectionSelect').addEventListener('change', function() {
+  const selectedRange = this.value.split('-');
+  const start = parseInt(selectedRange[0]);
+  const end = parseInt(selectedRange[1]);
+  const filteredPokemons = filterPokemonsByRange(start, end);
+  displayPokemons(filteredPokemons);
+});
+
+// También puedes hacer que se seleccione la opción inicialmente
+document.getElementById('sectionSelect').selectedIndex = 0;
+const initialRange = document.getElementById('sectionSelect').value.split('-');
+const initialStart = parseInt(initialRange[0]);
+const initialEnd = parseInt(initialRange[1]);
+const initialPokemons = filterPokemonsByRange(initialStart, initialEnd);
+displayPokemons(initialPokemons);

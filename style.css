@@ -1000,3 +1000,33 @@ justify-content: left;
     padding: 1%;
   }
 }
+
+
+/* Estilos para el select */
+#sectionSelect {
+  display: none; /* Ocultar por defecto */
+  /* Estilos personalizados */
+  padding: 2px;
+  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background-color: var(--identity-primary);
+  color: var(--colorscale-dark);
+}
+
+#sectionSelect :hover,
+#sectionSelect :focus {
+  color: #000000;
+}
+/* Estilos adicionales para el select en pantallas pequeñas */
+@media (max-width: 768px) {
+  #sectionSelect {
+    display: block; /* Mostrar en pantallas pequeñas */
+    width: 40%; /* Ancho ajustable */
+  }
+
+  /* Ocultar los botones en pantallas pequeñas */
+  .sectionButton {
+    display: none;
+  }
+}
