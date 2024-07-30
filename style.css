@@ -29,11 +29,8 @@
   --drop-shadow-hover: 0px 3px 12px 3px rgba(0, 177, 253, 0.2);
   --drop-shadow-inner: 0px 1px 3px 1px rgba(0, 177, 253, 0.2) inset;
 }
-p,
-h1,
-h2,
-h3,
-h4,
+
+.bt-ex,p,h1,h2,h3,h4,
 .body1-fonts,
 .body2-fonts,
 .body3-fonts {
@@ -122,6 +119,7 @@ body {
 .container {
   width: 100%;
   margin: 0 auto;
+  /* display: flex; */
 }
 
 .logowrapper {
@@ -940,16 +938,21 @@ body {
   height: 50%;
 }
 
+.bt-ex{
+  text-align: justify;
+}
 
 .title{
+  overflow-y: auto;
   background-color: var(--colorscale-dark-blue);
   box-shadow: var(--drop-shadow-inner);
   border-radius: 0.75rem;
   min-height: calc(83% - 16rem);
-  width: calc(90% - 0rem);
+  /* width: calc(90% - 0rem); */
+  width: auto;
   margin-left : 5%;
-  height: 70%;
-  /* overflow-y: auto; */
+  margin-right : 5%;
+  height: 85%;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -999,4 +1002,61 @@ justify-content: left;
     overflow: auto; /* Hace que aparezcan barras de desplazamiento si el contenido excede las dimensiones */
     padding: 1%;
   }
+}
+
+
+/* Estilos para el select */
+#sectionSelect {
+  display: none; /* Ocultar por defecto */
+  /* Estilos personalizados */
+  padding: 2px;
+  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background-color: var(--identity-primary);
+  color: var(--colorscale-dark);
+}
+
+#sectionSelect :hover,
+#sectionSelect :focus {
+  color: #000000;
+}
+/* Estilos adicionales para el select en pantallas pequeñas */
+@media (max-width: 768px) {
+  #sectionSelect {
+    display: block; /* Mostrar en pantallas pequeñas */
+    width: 40%; /* Ancho ajustable */
+  }
+
+  /* Ocultar los botones en pantallas pequeñas */
+  .sectionButton {
+    display: none;
+  }
+}
+
+#regionSelect {
+  display: none; /* Ocultar por defecto */
+  /* Estilos personalizados */
+  padding: 2px;
+  font-size: 16px;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  background-color: var(--identity-primary);
+  color: var(--colorscale-dark);
+}
+
+#regionSelect :hover,
+#regionSelect :focus {
+  color: #000000;
+}
+/* Estilos adicionales para el select en pantallas pequeñas */
+@media (max-width: 768px) {
+  #sectionSelect {
+    display: block; /* Mostrar en pantallas pequeñas */
+    width: 40%; /* Ancho ajustable */
+  }
+}
+
+.combat-img{
+  display: flex;
 }
