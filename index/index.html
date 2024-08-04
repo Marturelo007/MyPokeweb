@@ -1,117 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MB.Pokedex</title>
-    <link rel="stylesheet" href="/style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Exo+2:wght@200;300;600&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="icon" href="./assets/FullPokeball.png" />
-  <script src="./main.js" defer></script>
-    <!--   <script src="./search.js" defer></script> -->
-    <script
-      src="https://kit.fontawesome.com/bdf06eb8e9.js"
-      crossorigin="anonymous"
-    ></script>
-  </head>
-  <body id="body">
-    <main class="main">
-      <header class="header home">
-        <div class="container">
-          <div class="logowrapper">
-            <input id="checkbox" type="checkbox">
-            <label class="toggle" for="checkbox">
-                <div id="bar1" class="bars"></div>
-                <div id="bar2" class="bars"></div>
-                <div id="bar3" class="bars"></div>
-            </label>
-            <a href="/index/index.html" class="myImageA"><img id="myImage" src="../assets/EmptyPokeball.png" alt="Hover Image" class="myImage" width="100%" height="100%"></a>
-            <div class="navbar-container">
-              <a href="/pokedex.html"><button class="navbar">Pokedex</button></a>
-              <a href="/error.html"><button class="navbar">Items</button></a>
-              <a href="/error.html"><button class="navbar">Combat guide</button></a>                <!-- <a href="error.html"><button class="navbar">Pokemon showdown</button></a> -->
-            </div>
-            
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="index.css">
+  <title>Document</title>
+</head>
+<body>
+  
+  <div class="select">
+    <div
+      class="selected"
+      data-default="All"
+      data-one="option-1"
+      data-two="option-2"
+      data-three="option-3"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="1em"
+        viewBox="0 0 512 512"
+        class="arrow"
+      >
+        <path
+          d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"
+        ></path>
+      </svg>
+    </div>
+    <div class="options">
+      <div title="all">
+        <input id="all" name="option" type="radio" checked="" />
+        <label class="option" for="all" data-txt="All"></label>
+      </div>
+      <div title="option-1">
+        <input id="option-1" name="option" type="radio" />
+        <label class="option" for="option-1" data-txt="option-1"></label>
+      </div>
+      <div title="option-2">
+        <input id="option-2" name="option" type="radio" />
+        <label class="option" for="option-2" data-txt="option-2"></label>
+      </div>
+      <div title="option-3">
+        <input id="option-3" name="option" type="radio" />
+        <label class="option" for="option-3" data-txt="option-3"></label>
+      </div>
+    </div>
+  </div>
+  
+  
 
 
-            <!-- dividir por region, hacer el clasificador por tipo de pokemon y por region Aplicar el ESC,-->
-          </div>
-          <!-- <div class="search-wrapper">
-            <div class="search-wrap">
-              <img
-                src="../assets/search.svg"
-                alt="search icon"
-                class="search-icon"
-              />
-              <input
-                type="text"
-                class="search-input body3-fonts"
-                placeholder="Search"
-                id="search-input"
-              />
-              <img
-                src="../assets/cross.svg"
-                alt="cross icon"
-                class="search-close-icon"
-                id="search-close-icon"
-              />
-            </div>
-            <div class="sort-wrapper">
-              <div class="sort-wrap">
-                <img
-                  src="../assets/sorting.svg"
-                  alt="sorting"
-                  class="sort-icon"
-                  id="sort-icon"
-                />
-              </div>
-              <div class="filter-wrapper">
-                <p class="body2-fonts">Sort by:</p>
-                <div class="filter-wrap">
-                  <div>
-                    <input
-                      type="radio"
-                      id="number"
-                      name="filters"
-                      value="number"
-                      checked
-                    />
-                    <label for="number" class="body3-fonts">Name</label>
-                  </div>
-                  <div>
-                    <input type="radio" id="name" name="filters" value="name" />
-                    <label for="name" class="body3-fonts">Number</label>
-                  </div>
-                </div>
-              </div>
-            </div> 
-            <div class="toggle-switch">
-              <label class="switch-label">
-                <input type="checkbox" class="checkbox">
-                <span class="slider"></span>
-              </label>
-            </div>  -->
-          </div>
-        </div>
-      </header>
-      <section class="pokemon-list">
-        <div class="container">
-          <div class="list-wrapper"></div>
-        </div>
-        <section class="title">
-          <div class="container" id="scrollableDiv">
-            <H1>MB.POKEDEDEX</H1>
 
-            <H2>Welcome to the best pokemon guide ever !!</H2>
+</body>
 
-            <p>This guide will allow you to learn all about pokemons, battle items, how to use them and how to battle against other trainers</p>
-          </div>
-        </section>
-        <div id="not-found-message">Pokemon not found</div>
-      </section>
-    </main>
-  </body>
 </html>

@@ -15,10 +15,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadItem(id) {
   try {
-    const item = await fetch(`https://pokeapi.co/api/v2/item/${id}`).then((res) =>
-      res.json()
+    const item = await fetch(`https://pokeapi.co/api/v2/item/${id}`).then(
+      (res) => res.json()
     );
-
 
     if (currentItemID === id) {
       displayItemDetails(item);
@@ -73,6 +72,20 @@ function displayItemDetails(item) {
   const imageElement = document.querySelector(".detail-img-wrapper img");
   imageElement.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/${name}.png`;
   imageElement.alt = name;
+
+  // Display first effect entry as "Effect Entry"
+  const firstEffectEntry = getFirstEffectEntry(item);
+  document.querySelector(".pokemon-detail-wrap .pokemon-detail p.body3-fonts.effect-entry").textContent = firstEffectEntry;
+
+  // Other details like image, ID, etc., are already being displayed as per your existing code.
+}
+
+function getFirstEffectEntry(item) {
+  const effectEntries = item.effect_entries;
+  if (effectEntries.length > 0) {
+    return effectEntries[0].effect.replace(/\f/g, " ");
+  }
+  return "No effect entry available.";
 }
 
 function capitalizeFirstLetter(string) {

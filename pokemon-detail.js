@@ -363,3 +363,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const rightArrow = document.getElementById("rightArrow");
   rightArrow.addEventListener("click", loadNextPokemon);
 });
+
+
+async function variantsPokemon() {
+  const variant = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`); 
+}
