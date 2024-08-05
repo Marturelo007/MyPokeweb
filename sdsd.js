@@ -6,8 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const pokemonID = new URLSearchParams(window.location.search).get("id");
   const id = parseInt(pokemonID, 10);
 
-
-  
   if (id < 1 || id > MAX_POKEMONS) {
     window.location.href = "./pokedex.html";
     return;
@@ -19,9 +17,6 @@ document.addEventListener("DOMContentLoaded", () => {
   setupShinyToggle();
   setupNavigationButtons();
   logPokemonVarieties(id);
-
-  document.getElementById("varietyDropdown").addEventListener("change", handleVarietyChange);
-
 });
 
 async function fetchData(url) {
@@ -363,38 +358,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Function to handle Pokémon variety selection
 async function handleVarietyChange(event) {
   const selectedId = event.target.value;
-  try {
-    const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
-    const spriteElement = document.getElementById("varietySprite");
-
-    // Check if the spriteElement is null
-    if (spriteElement) {
-      spriteElement.src = selectedVarietyData.sprites.front_default;
-      spriteElement.alt = selectedVarietyData.name;
-    } else {
-      console.error("Element with ID 'varietySprite' not found.");
-    }
-  } catch (error) {
-    console.error("Failed to fetch variety data:", error);
-  }
+  const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
+  updateSprite(selectedVarietyData);
 }
-
-
-
 
 // Function to update sprite image based on the variety selected
 function updateSprite(pokemonData) {
   const spriteElement = document.getElementById("varietySprite");
-  if (pokemonData.sprites && pokemonData.sprites.front_default) {
-    spriteElement.src = pokemonData.sprites.front_default;
-    spriteElement.alt = pokemonData.name;
-  } else {
-    console.error("Sprite data is not available for this Pokémon.");
-    spriteElement.src = ''; // Clear the image source if no sprite is available
-    spriteElement.alt = pokemonData.name || 'Unknown Pokémon';
-  }
+  spriteElement.src = pokemonData.sprites.front_default;
+  spriteElement.alt = pokemonData.name;
 }
-
 
 // Function to toggle shiny sprite visibility
 function toggleShiny() {

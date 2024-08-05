@@ -161,20 +161,6 @@ checkbox.addEventListener("change", function() {
         element.style.removeProperty("--light-shadow");
     });
 
-    const elementsWithDropShadow = document.querySelectorAll("[style*='--drop-shadow']");
-    elementsWithDropShadow.forEach(element => {
-        const currentShadow = window.getComputedStyle(element).getPropertyValue("--drop-shadow");
-        element.style.setProperty("box-shadow", currentShadow);
-        element.style.removeProperty("--drop-shadow");
-    });
-
-    const elementsWithLightShadow = document.querySelectorAll("[style*='--light-shadow']");
-    elementsWithLightShadow.forEach(element => {
-        const currentShadow = window.getComputedStyle(element).getPropertyValue("--light-shadow");
-        element.style.setProperty("box-shadow", currentShadow);
-        element.style.removeProperty("--light-shadow");
-    });
-
     // Cambiar color de la imagen de la pokeball
     const pokeballColor = this.checked ? "white" : "black";
     pokeballImage.style.filter = `invert(${pokeballColor === "black" ? "0" : "1"})`;
@@ -291,123 +277,17 @@ displayPokemons(filteredPokemons);
 
   
 
-    // Cambiar color de la imagen de la pokeball
-    const pokeballColor = this.checked ? "white" : "black";
-    pokeballImage.style.filter = `invert(${pokeballColor === "black" ? "0" : "1"})`;
-});
 
-function filterPokemonsByRange(start, end) {
-  return allPokemons.filter(pokemon => {
-    const pokemonID = parseInt(pokemon.url.split("/")[6]);
-    return pokemonID >= start && pokemonID <= end;
-  });
-}
-
-// Event listeners for section buttons
-document.getElementById('section1Button').addEventListener('click', () => {
-  const kantoPokemons = filterPokemonsByRange(1, 151);
-  displayPokemons(kantoPokemons);
-});
-
-document.getElementById('section2Button').addEventListener('click', () => {
-  const johtoPokemons = filterPokemonsByRange(152, 251);
-  displayPokemons(johtoPokemons);
-});
-
-document.getElementById('section3Button').addEventListener('click', () => {
-  const hoennPokemons = filterPokemonsByRange(252,  386);
-  displayPokemons(hoennPokemons);
-});
-
-document.getElementById('section4Button').addEventListener('click', () => {
-  const sinnohPokemons = filterPokemonsByRange(387, 494);
-  displayPokemons(sinnohPokemons);
-});
-
-document.getElementById('section5Button').addEventListener('click', () => {
-  const teseliaPokemons = filterPokemonsByRange(495, 649);
-  displayPokemons(teseliaPokemons);
-});
-
-document.getElementById('section6Button').addEventListener('click', () => {
-  const kalosPokemons = filterPokemonsByRange(650, 721);
-  displayPokemons(kalosPokemons);
-});
-
-document.getElementById('section7Button').addEventListener('click', () => {
-  const alolaPokemons = filterPokemonsByRange(722, 809);
-  displayPokemons(alolaPokemons);
-});
-
-document.getElementById('section8Button').addEventListener('click', () => {
-  const galarPokemons = filterPokemonsByRange(810, 905);
-  displayPokemons(galarPokemons);
-});
-
-document.getElementById('section9Button').addEventListener('click', () => {
-  const paldeaPokemons = filterPokemonsByRange(906, 1025);
-  displayPokemons(paldeaPokemons);
-});
-// Initially display Pokémon from the first section
-document.getElementById('section1Button').click();
-
-document.getElementById('section2Button').click();
-
-document.getElementById('section3Button').click();
-
-document.getElementById('section4Button').click();
-
-document.getElementById('section5Button').click();
-
-document.getElementById('section6Button').click();
-
-document.getElementById('section7Button').click();
-
-document.getElementById('section8Button').click();
-
-document.getElementById('section9Button').click();
-
-
-document.addEventListener('DOMContentLoaded', function(){
-
-  var img = document.getElementById('myImage');
-
-  img.addEventListener('mouseenter', function (){
-    img.src = "/assets/FullPokeball.png";
-  });
-  
-  img.addEventListener('mouseleave', function() {
-    img.src = "/assets/EmptyPokeball.png"
-  });
-
-});
-
-document.addEventListener('DOMContentLoaded', function(){
-  var img = document.getElementById('myImage');
-
-  img.addEventListener('touchstart', function (){
-    img.src = "/assets/FullPokeball.png";
-  });
-
-  img.addEventListener('touchend', function() {
-    img.src = "/assets/EmptyPokeball.png";
-  });
-});
-
-
-
+  // Event listener para el select
 document.getElementById('sectionSelect').addEventListener('change', function() {
-const selectedRange = this.value.split('-');
-const start = parseInt(selectedRange[0]);
-const end = parseInt(selectedRange[1]);
-const filteredPokemons = filterPokemonsByRange(start, end);
-displayPokemons(filteredPokemons);
+  const selectedRange = this.value.split('-');
+  const start = parseInt(selectedRange[0]);
+  const end = parseInt(selectedRange[1]);
+  const filteredPokemons = filterPokemonsByRange(start, end);
+  displayPokemons(filteredPokemons);
 });
 
-
+// También puedes hacer que se seleccione la opción inicialmente
 document.getElementById('sectionSelect').selectedIndex = 0;
 const initialRange = document.getElementById('sectionSelect').value.split('-');
 const initialStart = parseInt(initialRange[0]);
-const initialEnd = parseInt(initialRange[1]);
-const initialPokemons = filterPokemonsByRange(initialStart, initialEnd);
-displayPokemons(initialPokemons);
