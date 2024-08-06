@@ -1,28 +1,21 @@
 let currentPokemonId = null;
 let isShinyActive = false;
 
-document.addEventListener("DOMContentLoaded", () => {
-  const MAX_POKEMONS = 1025;
+document.addEventListener("DOMContentLoaded", async () => {
   const pokemonID = new URLSearchParams(window.location.search).get("id");
   const id = parseInt(pokemonID, 10);
 
-
-  
-  if (id < 1 || id > MAX_POKEMONS) {
+  if (id >= 1 && id <= 1025) {
+    currentPokemonId = id;
+    await loadPokemon(id);
+    setupShinyToggle();
+    setupNavigationButtons();
+    await logPokemonVarieties(id);
+  } else {
     window.location.href = "./pokedex.html";
-    return;
   }
-
-  currentPokemonId = id;
-  loadPokemon(id);
-
-  setupShinyToggle();
-  setupNavigationButtons();
-  logPokemonVarieties(id);
-
-  document.getElementById("varietyDropdown").addEventListener("change", handleVarietyChange);
-
 });
+
 
 async function fetchData(url) {
   const response = await fetch(url);
@@ -32,29 +25,25 @@ async function fetchData(url) {
   return response.json();
 }
 
+
 async function loadPokemon(id) {
   try {
     const [pokemon, pokemonSpecies] = await Promise.all([
       fetchData(`https://pokeapi.co/api/v2/pokemon/${id}`),
-      fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`),
+      fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`)
     ]);
 
-    if (currentPokemonId === id) {
-      displayPokemonDetails(pokemon);
-      const flavorText = getEnglishFlavorText(pokemonSpecies);
-      document.querySelector(".body3-fonts.pokemon-description").textContent =
-        flavorText;
-
-      window.history.pushState({}, "", `./detail.html?id=${id}`);
-    }
-    return true;
+    displayPokemonDetails(pokemon);
+    const flavorText = getEnglishFlavorText(pokemonSpecies);
+    document.querySelector(".pokemon-description").textContent = flavorText;
+    
+    window.history.pushState({}, "", `./detail.html?id=${id}`);
   } catch (error) {
     console.error("An error occurred while fetching Pokémon data:", error);
-    document.querySelector(".pokemon-description").textContent =
-      "Failed to load Pokémon data. Please try again later.";
-    return false;
+    document.querySelector(".pokemon-description").textContent = "Failed to load Pokémon data. Please try again later.";
   }
 }
+
 
 async function navigatePokemon(id) {
   currentPokemonId = id;
@@ -149,10 +138,6 @@ function setTypeBackgroundColor(pokemon) {
     }
   `;
   document.head.appendChild(styleTag);
-}
-
-function capitalizeFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 
 function createAndAppendElement(parent, tag, options = {}) {
@@ -311,41 +296,117 @@ function displayPokemonDetails(pokemon) {
     });
   }
   
+  
   async function logPokemonVarieties(id) {
     try {
       const pokemonSpecies = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-      
+  
+      // Select the dropdown element
+      const dropdown = document.getElementById("varietyDropdown");
+  
+      // Clear previous options
+      dropdown.innerHTML = "";
+  
+      // Create a map to track unique variety IDs
+      const varietyDataMap = new Map();
+  
+      // Check if varieties exist
       if (pokemonSpecies.varieties && pokemonSpecies.varieties.length > 0) {
-        console.log(`Varieties of ${pokemonSpecies.name}:`);
-        const dropdown = document.getElementById("varietyDropdown");
-        dropdown.innerHTML = ""; // Clear previous options
+        // Fetch and process variety data
+        await Promise.all(pokemonSpecies.varieties.map(async (variety) => {
+          try {
+            const varietyData = await fetchData(variety.pokemon.url);
+            if (varietyData.sprites) {
+              const { id, name, sprites } = varietyData;
   
-        pokemonSpecies.varieties.forEach(async (variety) => {
-          const varietyData = await fetchData(variety.pokemon.url);
-          const option = document.createElement("option");
-          option.value = varietyData.id;
-          option.textContent = varietyData.name;
-          dropdown.appendChild(option);
-        });
+              // Add unique variety data
+              if (!varietyDataMap.has(id)) {
+                varietyDataMap.set(id, {
+                  name: capitalizeFirstLetter(name),
+                  normalSpriteUrl: sprites.front_default,
+                  shinySpriteUrl: sprites.front_shiny
+                });
   
-        // Add event listener to update sprite on selection change
-        dropdown.addEventListener("change", async (event) => {
-          const selectedId = event.target.value;
-          const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
-          const spriteElement = document.getElementById("varietySprite");
-          spriteElement.src = selectedVarietyData.sprites.front_default;
-          spriteElement.alt = selectedVarietyData.name;
-        });
+                // Create option element
+                const option = document.createElement("option");
+                option.value = id;
+                option.textContent = varietyDataMap.get(id).name;
+                option.dataset.spriteUrl = varietyDataMap.get(id).normalSpriteUrl;
+                option.dataset.shinySpriteUrl = varietyDataMap.get(id).shinySpriteUrl;
+                dropdown.appendChild(option);
+              }
+            } else {
+              console.error(`No sprite data for variety ${varietyData.name}`);
+            }
+          } catch (error) {
+            console.error("Failed to fetch variety data:", error);
+          }
+        }));
   
-        // Trigger change event to load the first variety's sprite
-        dropdown.dispatchEvent(new Event("change"));
+        // Set the default selected option to the first variety
+        if (dropdown.options.length > 0) {
+          dropdown.options[0].selected = true;
+          // Trigger change event to set the default sprite
+          dropdown.dispatchEvent(new Event("change"));
+        }
+  
+        // Show the dropdown and add event listener
+        dropdown.style.display = "block";
+        dropdown.removeEventListener("change", handleVarietyChange);
+        dropdown.addEventListener("change", handleVarietyChange);
       } else {
-        console.log(`No varieties found for ${pokemonSpecies.name}.`);
+        // Hide the dropdown if there are no varieties
+        dropdown.style.display = "none";
       }
     } catch (error) {
       console.error("An error occurred while fetching Pokémon varieties:", error);
     }
   }
+  
+  function handleVarietyChange(event) {
+    const selectedOption = event.target.selectedOptions[0];
+    if (selectedOption) {
+      const normalImageUrl = selectedOption.dataset.spriteUrl;
+      const shinyImageUrl = selectedOption.dataset.shinySpriteUrl;
+      const optionText = selectedOption.textContent;
+  
+      // Update the normal image
+      const normalImage = document.getElementById("normalImage");
+      if (normalImageUrl) {
+        normalImage.src = normalImageUrl;
+        normalImage.alt = `Normal ${optionText}`;
+      }
+  
+      // Update the shiny image
+      const shinyImage = document.getElementById("shinyImage");
+      if (shinyImageUrl) {
+        shinyImage.src = shinyImageUrl;
+        shinyImage.alt = `Shiny ${optionText}`;
+      }
+    }
+  }
+  
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+  
+  // Assuming you have a button to toggle shiny images
+  document.getElementById("shinyToggle").addEventListener("click", () => {
+    const dropdown = document.getElementById("varietyDropdown");
+    const selectedOption = dropdown.selectedOptions[0];
+    if (selectedOption) {
+      const shinyImageUrl = selectedOption.dataset.shinySpriteUrl;
+      const normalImage = document.getElementById("normalImage");
+      if (shinyImageUrl) {
+        normalImage.src = shinyImageUrl;
+        normalImage.alt = `Shiny ${selectedOption.textContent}`;
+      }
+    }
+  });
+  
+  
+  
+  
 document.addEventListener("DOMContentLoaded", async () => {
   // Initial setup when the DOM is fully loaded
   const pokemonID = new URLSearchParams(window.location.search).get("id");
@@ -360,29 +421,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-// Function to handle Pokémon variety selection
-async function handleVarietyChange(event) {
-  const selectedId = event.target.value;
-  try {
-    const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
-    const spriteElement = document.getElementById("varietySprite");
-
-    // Check if the spriteElement is null
-    if (spriteElement) {
-      spriteElement.src = selectedVarietyData.sprites.front_default;
-      spriteElement.alt = selectedVarietyData.name;
-    } else {
-      console.error("Element with ID 'varietySprite' not found.");
-    }
-  } catch (error) {
-    console.error("Failed to fetch variety data:", error);
-  }
-}
-
-
-
-
-// Function to update sprite image based on the variety selected
 function updateSprite(pokemonData) {
   const spriteElement = document.getElementById("varietySprite");
   if (pokemonData.sprites && pokemonData.sprites.front_default) {
@@ -390,26 +428,32 @@ function updateSprite(pokemonData) {
     spriteElement.alt = pokemonData.name;
   } else {
     console.error("Sprite data is not available for this Pokémon.");
-    spriteElement.src = ''; // Clear the image source if no sprite is available
+    spriteElement.src = '';
     spriteElement.alt = pokemonData.name || 'Unknown Pokémon';
   }
 }
 
 
-// Function to toggle shiny sprite visibility
-function toggleShiny() {
-  isShinyActive = !isShinyActive;
-  const spriteElement = document.getElementById("pokemonSprite");
-  const currentSprite = spriteElement.src;
-  spriteElement.src = isShinyActive
-    ? currentSprite.replace("front_default", "front_shiny")
-    : currentSprite.replace("front_shiny", "front_default");
+
+async function setupShinyToggle() {
+  const shinyButton = document.getElementById("shinyButton");
+  const normalImage = document.getElementById("normalImage");
+  const shinyImage = document.getElementById("shinyImage");
+
+  shinyButton.addEventListener("click", () => {
+    isShinyActive = !isShinyActive;
+
+    normalImage.style.display = isShinyActive ? "none" : "block";
+    shinyImage.style.display = isShinyActive ? "block" : "none";
+
+    loadPokemonImages(currentPokemonId, isShinyActive);
+  });
 }
 
-// Function to fetch and display the Pokémon's images and handle shiny toggle
 async function loadPokemonImages(id, isShinyActive) {
   try {
     const pokemonData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}`);
+
     const targetImage = isShinyActive ? document.getElementById("shinyImage") : document.getElementById("normalImage");
     targetImage.src = isShinyActive ? pokemonData.sprites.front_shiny : pokemonData.sprites.front_default;
     targetImage.alt = pokemonData.name;
@@ -417,6 +461,7 @@ async function loadPokemonImages(id, isShinyActive) {
     console.error("Error loading Pokémon images:", error);
   }
 }
+
 
 // Function to handle navigation to the next or previous Pokémon
 async function navigatePokemon(id) {

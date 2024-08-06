@@ -358,16 +358,30 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Function to handle Pokémon variety selection
 async function handleVarietyChange(event) {
   const selectedId = event.target.value;
-  const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
-  updateSprite(selectedVarietyData);
+  try {
+    const selectedVarietyData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${selectedId}`);
+    console.log("Fetched variety data:", selectedVarietyData);
+    updateSprite(selectedVarietyData);
+  } catch (error) {
+    console.error("Failed to fetch variety data:", error);
+  }
 }
+
+
 
 // Function to update sprite image based on the variety selected
 function updateSprite(pokemonData) {
   const spriteElement = document.getElementById("varietySprite");
-  spriteElement.src = pokemonData.sprites.front_default;
-  spriteElement.alt = pokemonData.name;
+  if (pokemonData.sprites && pokemonData.sprites.front_default) {
+    spriteElement.src = pokemonData.sprites.front_default;
+    spriteElement.alt = pokemonData.name;
+  } else {
+    console.error("Sprite data is not available for this Pokémon.");
+    spriteElement.src = ''; // Clear the image source if no sprite is available
+    spriteElement.alt = pokemonData.name || 'Unknown Pokémon';
+  }
 }
+
 
 // Function to toggle shiny sprite visibility
 function toggleShiny() {
