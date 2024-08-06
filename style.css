@@ -604,44 +604,6 @@ div#not-found-message {
   transform: scale(1.2);
 }
 
-
-.formButton{
-  border: none;
-  width: 8em;
-  height: 3em;
-  border-radius: 3em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 12px;
-  background: #58b9ff;
-  cursor: pointer;
-  transition: all 450ms ease-in-out;
-}
-.sparkle {
-  fill: #696969;
-  transition: all 800ms ease;
-}
-
-.text {
-  font-weight: 60;
-  color: #696969;
-  font-size: medium;
-}
-.formButton:hover {
-  background: linear-gradient(0deg,#58b9ff,rgb(0, 115, 255));
-  transform: translateY(-2px);
-}
-
-.formButton:hover .text{
-  color: white;
-}
-
-.formButton:hover .sparkle {
-  fill: white;
-  transform: scale(1.2);
-}
-
 .navbar{
   font-size: 20px;
   color:var(--colorscale-dark);
@@ -1059,4 +1021,40 @@ justify-content: left;
 
 .combat-img{
   display: flex;
+}
+/* ---------------------------------------------------------------------------- */
+
+#varietyDropdown{
+  border: none;
+  width: 8em;
+  height: 3em;
+  border-radius: 3em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  background: #58b9ff;
+  cursor: pointer;
+  transition: all 450ms ease-in-out;
+}
+.sparkle {
+  fill: #696969;
+  transition: all 800ms ease;
+}
+
+.pokemon-variety-option {
+  font-weight: 60;
+  color: #000000;
+  font-size: medium;
+  border-radius: 15%;
+}
+#varietyDropdown:hover {
+  background: linear-gradient(0deg,rgb(0, 140, 255),#58b9ff);
+  transform: translateY(-2px);
+}
+
+
+.formButton:hover .sparkle {
+  fill: white;
+  transform: scale(1.2);
 }

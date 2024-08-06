@@ -252,55 +252,11 @@ function displayPokemonDetails(pokemon) {
     return flavorTextEntry ? flavorTextEntry.flavor_text : "No flavor text available.";
   }
   
-  async function setupShinyToggle() {
-    const shinyButton = document.getElementById("shinyButton");
-    const normalImage = document.getElementById("normalImage");
-    const shinyImage = document.getElementById("shinyImage");
-  
-    shinyButton.addEventListener("click", () => {
-      isShinyActive = !isShinyActive;
-  
-      normalImage.style.display = isShinyActive ? "none" : "block";
-      shinyImage.style.display = isShinyActive ? "block" : "none";
-  
-      loadPokemonImages(currentPokemonId, isShinyActive);
-    });
-  }
-  
-  async function loadPokemonImages(id, isShinyActive) {
-    try {
-      const pokemonData = await fetchData(`https://pokeapi.co/api/v2/pokemon/${id}`);
-  
-      const targetImage = isShinyActive ? document.getElementById("shinyImage") : document.getElementById("normalImage");
-      targetImage.src = isShinyActive ? pokemonData.sprites.front_shiny : pokemonData.sprites.front_default;
-      targetImage.alt = pokemonData.name;
-    } catch (error) {
-      console.error("Error loading Pokémon images:", error);
-    }
-  }
-  
-  function setupNavigationButtons() {
-    const leftArrow = document.getElementById("leftArrow");
-    const rightArrow = document.getElementById("rightArrow");
-  
-    leftArrow.addEventListener("click", async () => {
-      if (currentPokemonId > 1) {
-        await navigatePokemon(currentPokemonId - 1);
-      }
-    });
-  
-    rightArrow.addEventListener("click", async () => {
-      if (currentPokemonId < 1025) {
-        await navigatePokemon(currentPokemonId + 1);
-      }
-    });
-  }
-  
   
   async function logPokemonVarieties(id) {
     try {
       const pokemonSpecies = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-  
+      
       // Select the dropdown element
       const dropdown = document.getElementById("varietyDropdown");
   
@@ -333,6 +289,10 @@ function displayPokemonDetails(pokemon) {
                 option.textContent = varietyDataMap.get(id).name;
                 option.dataset.spriteUrl = varietyDataMap.get(id).normalSpriteUrl;
                 option.dataset.shinySpriteUrl = varietyDataMap.get(id).shinySpriteUrl;
+                
+                // Add class to the option element
+                option.classList.add("pokemon-variety-option");
+  
                 dropdown.appendChild(option);
               }
             } else {
@@ -343,15 +303,16 @@ function displayPokemonDetails(pokemon) {
           }
         }));
   
-        // Set the default selected option to the first variety
+        // Show the dropdown and set the default selected option
         if (dropdown.options.length > 0) {
+          dropdown.style.display = "block";
           dropdown.options[0].selected = true;
-          // Trigger change event to set the default sprite
           dropdown.dispatchEvent(new Event("change"));
+        } else {
+          dropdown.style.display = "none";
         }
   
-        // Show the dropdown and add event listener
-        dropdown.style.display = "block";
+        // Add event listener to handle variety changes
         dropdown.removeEventListener("change", handleVarietyChange);
         dropdown.addEventListener("change", handleVarietyChange);
       } else {
@@ -363,6 +324,8 @@ function displayPokemonDetails(pokemon) {
     }
   }
   
+  
+  
   function handleVarietyChange(event) {
     const selectedOption = event.target.selectedOptions[0];
     if (selectedOption) {
@@ -370,21 +333,26 @@ function displayPokemonDetails(pokemon) {
       const shinyImageUrl = selectedOption.dataset.shinySpriteUrl;
       const optionText = selectedOption.textContent;
   
-      // Update the normal image
       const normalImage = document.getElementById("normalImage");
       if (normalImageUrl) {
         normalImage.src = normalImageUrl;
         normalImage.alt = `Normal ${optionText}`;
       }
   
-      // Update the shiny image
       const shinyImage = document.getElementById("shinyImage");
       if (shinyImageUrl) {
         shinyImage.src = shinyImageUrl;
         shinyImage.alt = `Shiny ${optionText}`;
       }
+  
+      // Update the sprite images based on the shiny state
+      const targetImage = isShinyActive ? shinyImage : normalImage;
+      const imageUrl = isShinyActive ? shinyImageUrl : normalImageUrl;
+      targetImage.src = imageUrl;
+      targetImage.alt = `${isShinyActive ? 'Shiny' : 'Normal'} ${optionText}`;
     }
   }
+  
   
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -446,9 +414,17 @@ async function setupShinyToggle() {
     normalImage.style.display = isShinyActive ? "none" : "block";
     shinyImage.style.display = isShinyActive ? "block" : "none";
 
-    loadPokemonImages(currentPokemonId, isShinyActive);
+    // Update the sprite images based on the shiny state
+    const currentOption = document.getElementById("varietyDropdown").selectedOptions[0];
+    if (currentOption) {
+      const imageUrl = isShinyActive ? currentOption.dataset.shinySpriteUrl : currentOption.dataset.spriteUrl;
+      const targetImage = isShinyActive ? shinyImage : normalImage;
+      targetImage.src = imageUrl;
+      targetImage.alt = `${isShinyActive ? 'Shiny' : 'Normal'} ${currentOption.textContent}`;
+    }
   });
 }
+
 
 async function loadPokemonImages(id, isShinyActive) {
   try {
@@ -467,7 +443,10 @@ async function loadPokemonImages(id, isShinyActive) {
 async function navigatePokemon(id) {
   currentPokemonId = id;
   await loadPokemon(id);
+  await logPokemonVarieties(id); // Ensure dropdown is updated for the new Pokémon
+  setupShinyToggle(); // Ensure shiny toggle is set up for the new Pokémon
 }
+
 
 // Function to handle clicking on the "Next" and "Previous" buttons
 function setupNavigationButtons() {
