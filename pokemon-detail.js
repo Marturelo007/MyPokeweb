@@ -192,6 +192,17 @@ function displayPokemonDetails(pokemon) {
     }
   });
 
+  // Clear the move section before adding new data
+  const movesWrapper = document.querySelector(".pokemon-detail.move");
+  movesWrapper.innerHTML = "";
+
+  abilities.forEach(({ ability }) => {
+    createAndAppendElement(movesWrapper, "p", {
+      className: "body3-fonts",
+      textContent: ability.name,
+    });
+  });
+
   document.querySelector(
     ".pokemon-detail-wrap .pokemon-detail p.body3-fonts.weight"
   ).textContent = `${weight / 10}kg`;
@@ -199,14 +210,6 @@ function displayPokemonDetails(pokemon) {
   document.querySelector(
     ".pokemon-detail-wrap .pokemon-detail p.body3-fonts.height"
   ).textContent = `${height / 10}m`;
-
-  const abilitiesWrapper = document.querySelector(".pokemon-detail-wrap .pokemon-detail.move");
-  abilities.forEach(({ ability }) => {
-    createAndAppendElement(abilitiesWrapper, "p", {
-      className: "body3-fonts",
-      textContent: ability.name,
-    });
-  });
 
   const statsWrapper = document.querySelector(".stats-wrapper");
   statsWrapper.innerHTML = "";
@@ -241,9 +244,10 @@ function displayPokemonDetails(pokemon) {
         max: 1000,
       });
     });
-  
-    setTypeBackgroundColor(pokemon);
-  }
+
+  setTypeBackgroundColor(pokemon);
+}
+
   
   function getEnglishFlavorText(pokemonSpecies) {
     const flavorTextEntry = pokemonSpecies.flavor_text_entries.find(
@@ -256,7 +260,7 @@ function displayPokemonDetails(pokemon) {
   async function logPokemonVarieties(id) {
     try {
       const pokemonSpecies = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-      
+  
       // Select the dropdown element
       const dropdown = document.getElementById("varietyDropdown");
   
@@ -289,8 +293,6 @@ function displayPokemonDetails(pokemon) {
                 option.textContent = varietyDataMap.get(id).name;
                 option.dataset.spriteUrl = varietyDataMap.get(id).normalSpriteUrl;
                 option.dataset.shinySpriteUrl = varietyDataMap.get(id).shinySpriteUrl;
-                
-                // Add class to the option element
                 option.classList.add("pokemon-variety-option");
   
                 dropdown.appendChild(option);
@@ -303,8 +305,8 @@ function displayPokemonDetails(pokemon) {
           }
         }));
   
-        // Show the dropdown and set the default selected option
-        if (dropdown.options.length > 0) {
+        // Show or hide the dropdown based on the number of varieties
+        if (dropdown.options.length > 1) {
           dropdown.style.display = "block";
           dropdown.options[0].selected = true;
           dropdown.dispatchEvent(new Event("change"));
@@ -323,6 +325,7 @@ function displayPokemonDetails(pokemon) {
       console.error("An error occurred while fetching Pokémon varieties:", error);
     }
   }
+  
   
   
   
@@ -411,8 +414,13 @@ async function setupShinyToggle() {
   shinyButton.addEventListener("click", () => {
     isShinyActive = !isShinyActive;
 
-    normalImage.style.display = isShinyActive ? "none" : "block";
-    shinyImage.style.display = isShinyActive ? "block" : "none";
+    if (isShinyActive) {
+      normalImage.style.display = "none";
+      shinyImage.style.display = "block";
+    } else {
+      normalImage.style.display = "block";
+      shinyImage.style.display = "none";
+    }
 
     // Update the sprite images based on the shiny state
     const currentOption = document.getElementById("varietyDropdown").selectedOptions[0];
@@ -424,6 +432,7 @@ async function setupShinyToggle() {
     }
   });
 }
+
 
 
 async function loadPokemonImages(id, isShinyActive) {

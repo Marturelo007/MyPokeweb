@@ -1024,9 +1024,9 @@ justify-content: left;
 }
 /* ---------------------------------------------------------------------------- */
 
-#varietyDropdown{
+/* #varietyDropdown{
   border: none;
-  width: 8em;
+  width: 10em;
   height: 3em;
   border-radius: 3em;
   display: flex;
@@ -1036,6 +1036,7 @@ justify-content: left;
   background: #58b9ff;
   cursor: pointer;
   transition: all 450ms ease-in-out;
+  text-align: center;
 }
 .sparkle {
   fill: #696969;
@@ -1057,4 +1058,4 @@ justify-content: left;
 .formButton:hover .sparkle {
   fill: white;
   transform: scale(1.2);
-}
+} */
