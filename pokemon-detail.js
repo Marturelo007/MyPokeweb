@@ -14,7 +14,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   } else {
     window.location.href = "./pokedex.html";
   }
+  
 });
+
 
 
 async function fetchData(url) {
@@ -181,7 +183,7 @@ function displayPokemonDetails(pokemon) {
         textContent: type.name,
       });
     } else if (index === 1) {
-      const secondTypeColor = typeColors[type.name] || "#000000"; // Default to black if color not found
+      const secondTypeColor = typeColors[type.name] || "#000000";
       const secondTypeClass = `${type.name} second-type`;
       const style = `background-color: ${secondTypeColor};`;
       createAndAppendElement(typeWrapper, "p", {
@@ -203,13 +205,9 @@ function displayPokemonDetails(pokemon) {
     });
   });
 
-  document.querySelector(
-    ".pokemon-detail-wrap .pokemon-detail p.body3-fonts.weight"
-  ).textContent = `${weight / 10}kg`;
-
-  document.querySelector(
-    ".pokemon-detail-wrap .pokemon-detail p.body3-fonts.height"
-  ).textContent = `${height / 10}m`;
+  // Update weight and height
+  document.querySelector(".pokemon-detail-wrap .pokemon-detail p.body3-fonts.weight").textContent = `${(weight / 10).toFixed(1)} kg`;
+  document.querySelector(".pokemon-detail-wrap .pokemon-detail p.body3-fonts.height").textContent = `${(height / 10).toFixed(1)} m`;
 
   const statsWrapper = document.querySelector(".stats-wrapper");
   statsWrapper.innerHTML = "";
@@ -237,16 +235,17 @@ function displayPokemonDetails(pokemon) {
         className: "body3-fonts",
         textContent: String(base_stat).padStart(3, "0"),
       });
-  
-      createAndAppendElement(statDiv, "progress", {
-        className: "progress-bar",
-        value: base_stat,
-        max: 1000,
-      });
+
+    createAndAppendElement(statDiv, "progress", {
+      className: "progress-bar",
+      value: base_stat,
+      max: 1000,
     });
+  });
 
   setTypeBackgroundColor(pokemon);
 }
+
 
   
   function getEnglishFlavorText(pokemonSpecies) {
@@ -260,8 +259,6 @@ function displayPokemonDetails(pokemon) {
   async function logPokemonVarieties(id) {
     try {
       const pokemonSpecies = await fetchData(`https://pokeapi.co/api/v2/pokemon-species/${id}`);
-  
-      // Select the dropdown element
       const dropdown = document.getElementById("varietyDropdown");
   
       // Clear previous options
@@ -270,16 +267,13 @@ function displayPokemonDetails(pokemon) {
       // Create a map to track unique variety IDs
       const varietyDataMap = new Map();
   
-      // Check if varieties exist
       if (pokemonSpecies.varieties && pokemonSpecies.varieties.length > 0) {
-        // Fetch and process variety data
-        await Promise.all(pokemonSpecies.varieties.map(async (variety) => {
+        await Promise.all(pokemonSpecies.varieties.map(async (variety, index) => {
           try {
             const varietyData = await fetchData(variety.pokemon.url);
             if (varietyData.sprites) {
               const { id, name, sprites } = varietyData;
   
-              // Add unique variety data
               if (!varietyDataMap.has(id)) {
                 varietyDataMap.set(id, {
                   name: capitalizeFirstLetter(name),
@@ -296,6 +290,11 @@ function displayPokemonDetails(pokemon) {
                 option.classList.add("pokemon-variety-option");
   
                 dropdown.appendChild(option);
+  
+                // Set the second option (index 1) as default
+                if (index === 0) {
+                  option.selected = true;
+                }
               }
             } else {
               console.error(`No sprite data for variety ${varietyData.name}`);
@@ -308,7 +307,6 @@ function displayPokemonDetails(pokemon) {
         // Show or hide the dropdown based on the number of varieties
         if (dropdown.options.length > 1) {
           dropdown.style.display = "block";
-          dropdown.options[0].selected = true;
           dropdown.dispatchEvent(new Event("change"));
         } else {
           dropdown.style.display = "none";
@@ -318,13 +316,13 @@ function displayPokemonDetails(pokemon) {
         dropdown.removeEventListener("change", handleVarietyChange);
         dropdown.addEventListener("change", handleVarietyChange);
       } else {
-        // Hide the dropdown if there are no varieties
         dropdown.style.display = "none";
       }
     } catch (error) {
       console.error("An error occurred while fetching Pokémon varieties:", error);
     }
   }
+  
   
   
   
@@ -378,19 +376,7 @@ function displayPokemonDetails(pokemon) {
   
   
   
-document.addEventListener("DOMContentLoaded", async () => {
-  // Initial setup when the DOM is fully loaded
-  const pokemonID = new URLSearchParams(window.location.search).get("id");
-  const id = parseInt(pokemonID, 10);
 
-  if (id >= 1 && id <= 1025) {
-    currentPokemonId = id;
-    await loadPokemon(id);
-    setupShinyToggle();
-    setupNavigationButtons();
-    await logPokemonVarieties(id);
-  }
-});
 
 function updateSprite(pokemonData) {
   const spriteElement = document.getElementById("varietySprite");
@@ -491,3 +477,13 @@ async function setupPage() {
 
 setupPage();
   
+
+function updatePokemonName(name) {
+  document.querySelector(".name-wrap .name").textContent = capitalizeFirstLetter(name);
+}
+
+function updatePokemonId(id) {
+  document.querySelector(".pokemon-id-wrap .body2-fonts").textContent = `#${String(id).padStart(3, "0")}`;
+}
+
+document.addEventListener("DOMContentLoaded", setupPage);

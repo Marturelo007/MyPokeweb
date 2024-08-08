@@ -94,6 +94,11 @@ input:focus-visible {
   display: none;
 }
 
+.hidden {
+  display: none;
+}
+
+
 body {
   margin: 0;
   height: 100vh;
