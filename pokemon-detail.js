@@ -487,3 +487,26 @@ function updatePokemonId(id) {
 }
 
 document.addEventListener("DOMContentLoaded", setupPage);
+
+document.addEventListener('DOMContentLoaded', () => {
+  const customSelect = document.querySelector('.custom-select');
+  const selectElement = document.getElementById('varietyDropdown');
+  const selectLabel = document.querySelector('.select-label');
+  
+  // Display the current selection
+  function updateLabel() {
+    const selectedOption = selectElement.options[selectElement.selectedIndex];
+    selectLabel.textContent = selectedOption ? selectedOption.textContent : 'Select an option';
+  }
+
+  // Toggle the select dropdown when the custom select is clicked
+  customSelect.addEventListener('click', () => {
+    selectElement.focus(); // Focus the hidden select to show options
+  });
+
+  // Update the label when the selection changes
+  selectElement.addEventListener('change', updateLabel);
+
+  // Initialize the label
+  updateLabel();
+});

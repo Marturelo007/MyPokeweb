@@ -1028,8 +1028,7 @@ justify-content: left;
   display: flex;
 }
 /* ---------------------------------------------------------------------------- */
-
-/* #varietyDropdown{
+#varietyDropdown {
   border: none;
   width: 10em;
   height: 3em;
@@ -1042,25 +1041,37 @@ justify-content: left;
   cursor: pointer;
   transition: all 450ms ease-in-out;
   text-align: center;
-}
-.sparkle {
-  fill: #696969;
-  transition: all 800ms ease;
+  padding-left: 2em; /* Adjust padding to create space for the pseudo-element */
+  padding-right: 2em; /* Adjust padding to ensure space for the arrow */
+  color: #000; /* Default text color */
+  position: relative; /* Required for the absolute positioning of ::after */
 }
 
-.pokemon-variety-option {
-  font-weight: 60;
+#varietyDropdown:hover {
+  background: #58b9ff; /* Keep the background consistent */
+  color: #ffffff; /* Change text color to white on hover */
+  transform: translateY(-2px);
+}
+
+#varietyDropdown option {
+  font-weight: 600;
   color: #000000;
   font-size: medium;
   border-radius: 15%;
 }
-#varietyDropdown:hover {
-  background: linear-gradient(0deg,rgb(0, 140, 255),#58b9ff);
-  transform: translateY(-2px);
+
+#varietyDropdown::-ms-expand {
+  display: none; /* Hides the default dropdown arrow in Internet Explorer */
 }
 
-
-.formButton:hover .sparkle {
-  fill: white;
-  transform: scale(1.2);
-} */
+#varietyDropdown::after {
+  content: ''; /* Add content if needed or leave it empty */
+  position: absolute;
+  left: 0.5em; /* Position from the left */
+  top: 50%; /* Vertically center it */
+  transform: translateY(-50%); /* Center it vertically */
+  width: 1em; /* Width of the pseudo-element (e.g., for a custom arrow) */
+  height: 1em; /* Height of the pseudo-element (e.g., for a custom arrow) */
+  background-size: contain; /* Adjust background image size */
+  pointer-events: none; /* Ensure it doesn't interfere with click events */
+}
