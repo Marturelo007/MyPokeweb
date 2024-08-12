@@ -1026,8 +1026,10 @@ justify-content: left;
 
 .combat-img{
   display: flex;
+  color: #ff6a00;
 }
 /* ---------------------------------------------------------------------------- */
+
 #varietyDropdown {
   border: none;
   width: 10em;
@@ -1041,37 +1043,23 @@ justify-content: left;
   cursor: pointer;
   transition: all 450ms ease-in-out;
   text-align: center;
-  padding-left: 2em; /* Adjust padding to create space for the pseudo-element */
-  padding-right: 2em; /* Adjust padding to ensure space for the arrow */
-  color: #000; /* Default text color */
-  position: relative; /* Required for the absolute positioning of ::after */
+  padding-left: 2em; 
+  padding-right: 2em;
+  color: #000; 
+  position: relative; 
 }
 
 #varietyDropdown:hover {
-  background: #58b9ff; /* Keep the background consistent */
-  color: #ffffff; /* Change text color to white on hover */
+  background: #58b9ff; 
+  color: #ffffff; 
   transform: translateY(-2px);
 }
 
 #varietyDropdown option {
-  font-weight: 600;
   color: #000000;
-  font-size: medium;
   border-radius: 15%;
 }
 
 #varietyDropdown::-ms-expand {
-  display: none; /* Hides the default dropdown arrow in Internet Explorer */
-}
-
-#varietyDropdown::after {
-  content: ''; /* Add content if needed or leave it empty */
-  position: absolute;
-  left: 0.5em; /* Position from the left */
-  top: 50%; /* Vertically center it */
-  transform: translateY(-50%); /* Center it vertically */
-  width: 1em; /* Width of the pseudo-element (e.g., for a custom arrow) */
-  height: 1em; /* Height of the pseudo-element (e.g., for a custom arrow) */
-  background-size: contain; /* Adjust background image size */
-  pointer-events: none; /* Ensure it doesn't interfere with click events */
+  display: none; 
 }
